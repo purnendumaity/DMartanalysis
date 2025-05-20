@@ -20,11 +20,19 @@ output_path = "./query_result/combined_summary.xlsx"
 # Initialize Spark Session
 spark = SparkSession.builder.appName("DMartanalysis").config("spark.driver.memory", "2g").getOrCreate()
 
-# Load CSV File
-#local_file_path = "./input_file/Sales.csv"
-#df = spark.read.csv(local_file_path, header=True, inferSchema=True)
-#print("\n CSV File Schema:")
-#df.printSchema()
+#File schema check
+local_file_path_Sales = "./input_file/Sales.csv"
+local_file_path_Product = "./input_file/Product.csv"
+local_file_path_Customer = "./input_file/Customer.csv"
+df = spark.read.csv(local_file_path_Sales, header=True, inferSchema=True)
+print("\n Sales.csv File Schema:")
+df.printSchema()
+df = spark.read.csv(local_file_path_Product, header=True, inferSchema=True)
+print("\n Product.csv File Schema:")
+df.printSchema()
+df = spark.read.csv(local_file_path_Customer, header=True, inferSchema=True)
+print("\n Customer.csv File Schema:")
+df.printSchema()
 
 # ------------------------------------------
 # Task 2: Load Data into PySpark DataFrames
