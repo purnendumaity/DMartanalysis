@@ -29,62 +29,175 @@ I have also utilized pandas, openpyxl package so that each query result pandas d
 in excel file in respective sheet.
 
 =========== Pysparkanalysis.py run console prints =====================
-D:\Python-Projects\DatapipelineAmazon\.venv\Scripts\python.exe D:\Python-Projects\DatapipelineAmazon\Pysparkcsvprocessing.py 
+D:\Python-Projects\DMartanalysis\.venv\Scripts\python.exe D:\Python-Projects\DMartanalysis\Pysparkanalysis.py 
 Setting default log level to "WARN".
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
 
- CSV File Schema:
+ Sales.csv File Schema:
 root
- |-- review_date: date (nullable = true)
- |-- marketplace: string (nullable = true)
- |-- customer_id: integer (nullable = true)
- |-- review_id: string (nullable = true)
- |-- product_id: string (nullable = true)
- |-- product_parent: double (nullable = true)
- |-- product_title: string (nullable = true)
- |-- product_category: string (nullable = true)
- |-- star_rating: integer (nullable = true)
- |-- helpful_votes: integer (nullable = true)
- |-- total_votes: integer (nullable = true)
- |-- vine: boolean (nullable = true)
- |-- verified_purchase: boolean (nullable = true)
- |-- review_headline: string (nullable = true)
- |-- review_body: string (nullable = true)
+ |-- Order Line: integer (nullable = true)
+ |-- Order ID: string (nullable = true)
+ |-- Order Date: date (nullable = true)
+ |-- Ship Date: date (nullable = true)
+ |-- Ship Mode: string (nullable = true)
+ |-- Customer ID: string (nullable = true)
+ |-- Product ID: string (nullable = true)
+ |-- Sales: double (nullable = true)
+ |-- Quantity: integer (nullable = true)
+ |-- Discount: double (nullable = true)
+ |-- Profit: double (nullable = true)
 
 
- Total Rows in File: 151
-
- Now Showing First 5 Rows:
-+-----------+-----------+-----------+--------------+----------+--------------+------------------------------------------------------------------------------+----------------+-----------+-------------+-----------+-----+-----------------+------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|review_date|marketplace|customer_id|review_id     |product_id|product_parent|product_title                                                                 |product_category|star_rating|helpful_votes|total_votes|vine |verified_purchase|review_headline                                       |review_body                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-+-----------+-----------+-----------+--------------+----------+--------------+------------------------------------------------------------------------------+----------------+-----------+-------------+-----------+-----+-----------------+------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|1995-06-24 |US         |53096571   |RHL4UW17ZK72A |521314925 |9.81E8        |Invention and Evolution:Design in Nature and Engineering                      |Books           |5          |9            |9          |false|false            |BUY THIS BOOK!                                        |This is a beautiful book. French talks about energy, form, mechanism, and economy in natural and man-made things. He compares birds to planes in terms of fuel-capacity, energy conversion efficiency, drag, etc. He compares suspension bridges and dinosaurs. He provides examples of neat inventions and the thought that has gone into them (every- thing from steam-catapults to toy cars to grommets). This is &quot;How Things Work&quot; for the non-moron crowd.                                                                                                                                                                                                                |
-|1995-06-24 |US         |53096571   |R34N4QWDXX58WB|870210092 |4.43E8        |Arming and Fitting of English Ships of War, 1600-1815                         |Books           |4          |12           |13         |false|false            |good enough to understand all of Pat O'brien          |Nice diags, lucid explanations of rigging, guns, hull, etc. A lot of the pics also appear in &quot;Nelson's Navy&quot;, so if you have that, don't bother.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-|1995-07-07 |US         |53096573   |RPLV77JZXG575 |047194128X|3.77E8        |Object-Oriented Type Systems                                                  |Books           |4          |4            |4          |false|false            |Good techniques, well written.                        |The best (and possibly only) book I've seen on the topic. I very much liked their approach of starting with a simplified language and adding the necessary features. The algorithms are useful, well presented, and their assumptions are laid out clearly.                                                                                                                                                                                                                                                                                                                                                                                                                              |
-|1995-07-18 |US         |53011769   |R33HOJ2OWJIDQI|089145537X|8.37E8        |The Collector's Guide to Harker Pottery U.S.A.: Identification and Value Guide|Books           |5          |27           |27         |false|false            |The definitive volume on Harker Pottery               |OK, I'm biased. My mother wrote this one. Many of the pieces featured in the book are part of my collection. But it's still the ONLY book on Harker Pottery, America's Oldest Pottery. This book not only includes beautiful pictures of Harkerware, but also includes a price guide and some history of the pottery industry of the Ohio Valley. Harker is a contemporary of many currently collectible potteries such as Hall and Homer Laughlin. While not as valuable currently as Autumn Leaf or Fiestaware, Harker's Cameoware is becoming increasingly popular. Harker is also the only manufacturer of ceramic serving forks and spoons as well as beautiful ceramic rolling pins|
-|1995-07-19 |US         |53096552   |R3SM9591SGTMJ |517593483 |1.14E8        |Fingerprints Of The Gods: The Evidence of Earth's Lost Civilization           |Books           |5          |0            |1          |false|false            |This book will open your mind to the past. Excellent!!|The author has a keen sense of how to unfold his entire theory over 500 pages so that you leave the book convinced of the strong possibility that it is true and want to read more about the subject of lost civilizations. I can't wait to read &quot;When the Sky fell&quot; once its released (by Ruth Ann-Flems)                                                                                                                                                                                                                                                                                                                                                                     |
-+-----------+-----------+-----------+--------------+----------+--------------+------------------------------------------------------------------------------+----------------+-----------+-------------+-----------+-----+-----------------+------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-only showing top 5 rows
-
-Data cleaning and transformation started
-
- Duplicate review_id List:
-+-------------+-----+
-|review_id    |count|
-+-------------+-----+
-|R2PXCLE4APVQG|2    |
-+-------------+-----+
+ Product.csv File Schema:
+root
+ |-- Product ID: string (nullable = true)
+ |-- Category: string (nullable = true)
+ |-- Sub-Category: string (nullable = true)
+ |-- Product Name: string (nullable = true)
 
 
- Total Rows (After Deduplication): 150
-Merging 1 partitioned CSV files...
-Final cleaned CSV generated: D:\Python-Projects\DatapipelineAmazon\output_file\final_cleaned_awsdata.csv
-All partitioned CSVs are preserved in ./processed_data/
-Data cleaning and transformation completed
- Total Execution Time: 00:00:52
-SUCCESS: The process with PID 14952 (child process of PID 17960) has been terminated.
-SUCCESS: The process with PID 17960 (child process of PID 7748) has been terminated.
-SUCCESS: The process with PID 7748 (child process of PID 18576) has been terminated.
+ Customer.csv File Schema:
+root
+ |-- Customer ID: string (nullable = true)
+ |-- Customer Name: string (nullable = true)
+ |-- Segment: string (nullable = true)
+ |-- Age: integer (nullable = true)
+ |-- Country: string (nullable = true)
+ |-- City: string (nullable = true)
+ |-- State: string (nullable = true)
+ |-- Postal Code: integer (nullable = true)
+ |-- Region: string (nullable = true)
+
+
+Query 1 Result:
++---------------+-----------------+
+|Category       |Total_Sales      |
++---------------+-----------------+
+|Technology     |836154.0329999966|
+|Furniture      |741999.7952999998|
+|Office Supplies|719047.0320000029|
++---------------+-----------------+
+
+
+Query 2 Result:
++-----------+-------------+-----+
+|Customer_ID|Customer Name|count|
++-----------+-------------+-----+
+|WB-21850   |William Brown|37   |
++-----------+-------------+-----+
+
+
+Query 3 Result:
++-------------------+
+|Average_Discount   |
++-------------------+
+|0.15620272163298934|
++-------------------+
+
+
+Query 4 Result:
++-------+--------------------+
+|Region |Unique_Products_Sold|
++-------+--------------------+
+|West   |1536                |
+|East   |1408                |
+|Central|1316                |
+|South  |1059                |
++-------+--------------------+
+
+
+Query 5 Result:
++-------------+------------------+
+|State        |Total_Profit      |
++-------------+------------------+
+|California   |59398.31250000002 |
+|New York     |58177.834100000066|
+|Washington   |24405.796599999983|
+|Texas        |20528.91100000002 |
+|Pennsylvania |13604.935000000007|
+|Georgia      |12781.342599999998|
+|Arizona      |9563.200100000004 |
+|Illinois     |9560.145599999993 |
+|Wisconsin    |8569.869700000003 |
+|Michigan     |7752.2969000000085|
+|Minnesota    |7202.522500000001 |
+|Virginia     |6940.111200000005 |
+|Ohio         |5985.887000000001 |
+|Massachusetts|5905.5446         |
+|Kentucky     |4513.313999999998 |
+|Tennessee    |3434.276499999999 |
+|Delaware     |3336.382700000002 |
+|Alabama      |2845.0624         |
+|Indiana      |2707.349500000002 |
+|Louisiana    |2659.2401         |
++-------------+------------------+
+only showing top 20 rows
+
+
+Query 6 Result:
++------------+-----------------+
+|Sub-Category|Total_Sales      |
++------------+-----------------+
+|Phones      |330007.0540000001|
++------------+-----------------+
+
+
+Query 7 Result:
++-----------+------------------+
+|Segment    |Average_Age       |
++-----------+------------------+
+|Consumer   |44.60585628973223 |
+|Home Office|43.28210880538418 |
+|Corporate  |44.816556291390725|
++-----------+------------------+
+
+
+Query 8 Result:
++--------------+-----+
+|Ship Mode     |count|
++--------------+-----+
+|First Class   |1538 |
+|Same Day      |543  |
+|Second Class  |1945 |
+|Standard Class|5968 |
++--------------+-----+
+
+
+Query 9 Result:
++-------------+--------------+
+|City         |Total_Quantity|
++-------------+--------------+
+|New York City|3217          |
+|Los Angeles  |2756          |
+|Philadelphia |2299          |
+|San Francisco|1773          |
+|Houston      |1425          |
+|Seattle      |1371          |
+|Chicago      |1153          |
+|Columbus     |854           |
+|Aurora       |611           |
+|San Diego    |609           |
+|Dallas       |602           |
+|Jacksonville |362           |
+|Detroit      |332           |
+|Springfield  |282           |
+|Rochester    |279           |
+|Charlotte    |275           |
+|Wilmington   |271           |
+|Tucson       |257           |
+|Phoenix      |256           |
+|Dover        |256           |
++-------------+--------------+
+only showing top 20 rows
+
+
+Query 10 Result:
++-----------+-------------------+
+|Segment    |Avg_Profit_Margin  |
++-----------+-------------------+
+|Home Office|0.14286958506103364|
++-----------+-------------------+
+
 
 Process finished with exit code 0
 
